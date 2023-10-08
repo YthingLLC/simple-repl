@@ -7,8 +7,8 @@ fn main() {
     let _ = repl(eval);
 }
 
-fn eval(input: &str) -> Option<()> {
+fn eval(input: &str) -> Result<(), ()> {
     println!("{input}");
     println!();
-    Some(())
+    Ok(())
 }

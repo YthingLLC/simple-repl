@@ -23,12 +23,12 @@ fn main() {
 
 //the evaluator is passed a single "line" to be evaluated
 //this example simply echos the user input
-//evaluator must return Option<()> and accept a &str
-//if `None` is returned, the repl loop breaks and returns to the function which called it
-fn eval(input: &str) -> Option<()> {
+//evaluator must return Result<(), E> and accept a &str
+//if `Err(E)` is returned, the repl loop breaks and returns the Err(E) to the function which called it
+fn eval(input: &str) -> Result<(), ()> {
     println!("{input}");
     println!();
-    Some(())
+    Ok(())
 }
 ```
 

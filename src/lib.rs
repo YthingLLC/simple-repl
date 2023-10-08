@@ -1,18 +1,18 @@
 use rustyline::error::ReadlineError;
 use rustyline::DefaultEditor;
 
-pub enum ReplError {
+pub enum ReplError<E> {
     ReadlineError,
-    EvaluatorError,
+    EvaluatorError(E),
 }
 
-impl std::convert::From<ReadlineError> for ReplError {
+impl <E> std::convert::From<ReadlineError> for ReplError<E> {
     fn from(_: ReadlineError) -> Self {
         ReplError::ReadlineError
     }
 }
 
-pub fn repl(evaluator: impl Fn(&str) -> Option<()>) -> std::result::Result<(), ReplError> {
+pub fn repl<E> (evaluator: impl Fn(&str) -> Result<(), E>) -> std::result::Result<(), ReplError<E>> {
     let mut rl = DefaultEditor::new()?;
 
     loop {
@@ -22,8 +22,8 @@ pub fn repl(evaluator: impl Fn(&str) -> Option<()>) -> std::result::Result<(), R
         rl.add_history_entry(input_str)?;
 
         match evaluator(input_str) {
-            Some(_) => continue,
-            None => break Err(ReplError::EvaluatorError),
+            Ok(_) => continue,
+            Err(e) => break Err(ReplError::EvaluatorError(e)),
         }
     }
 }
