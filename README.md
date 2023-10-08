@@ -5,6 +5,8 @@ This is a *very* simple base for interactive repl / CLI applications.
 The purpose of this is, primarily, to prevent me from having to rewrite this 'boilerplate' in every small CLI 
 application I have been working on. 
 
+This uses the [rustyline](https://crates.io/crates/rustyline) crate to provide command history, line editing, etc.
+
 Usage:
 
 ```rust
