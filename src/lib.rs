@@ -7,15 +7,15 @@ pub enum ReplError<E>{
     EvaluatorError(E),
 }
 
-pub enum EvalResult {
+pub enum EvalResult<T> {
     Continue,
     ExitRepl,
-    Passthrough(isize),
+    Passthrough(T),
 }
 
-pub enum ReplResult {
+pub enum ReplResult<T> {
     ExitRepl,
-    Passthrough(isize)
+    Passthrough(T)
 }
 
 impl <E> std::convert::From<ReadlineError> for ReplError<E> {
@@ -24,7 +24,7 @@ impl <E> std::convert::From<ReadlineError> for ReplError<E> {
     }
 }
 
-pub fn repl<E> (evaluator: impl Fn(&str) -> Result<EvalResult, E>) -> std::result::Result<ReplResult, ReplError<E>> {
+pub fn repl<T, E> (evaluator: impl Fn(&str) -> Result<EvalResult<T>, E>) -> std::result::Result<ReplResult<T>, ReplError<E>> {
     let mut rl = DefaultEditor::new()?;
 
     loop {
