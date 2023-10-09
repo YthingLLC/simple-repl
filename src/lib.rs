@@ -1,9 +1,21 @@
 use rustyline::error::ReadlineError;
 use rustyline::DefaultEditor;
 
-pub enum ReplError<E> {
+#[derive(Debug)]
+pub enum ReplError<E>{
     ReadlineError,
     EvaluatorError(E),
+}
+
+pub enum EvalResult {
+    Continue,
+    ExitRepl,
+    Passthrough(isize),
+}
+
+pub enum ReplResult {
+    ExitRepl,
+    Passthrough(isize)
 }
 
 impl <E> std::convert::From<ReadlineError> for ReplError<E> {
@@ -12,7 +24,7 @@ impl <E> std::convert::From<ReadlineError> for ReplError<E> {
     }
 }
 
-pub fn repl<E> (evaluator: impl Fn(&str) -> Result<(), E>) -> std::result::Result<(), ReplError<E>> {
+pub fn repl<E> (evaluator: impl Fn(&str) -> Result<EvalResult, E>) -> std::result::Result<ReplResult, ReplError<E>> {
     let mut rl = DefaultEditor::new()?;
 
     loop {
@@ -22,7 +34,9 @@ pub fn repl<E> (evaluator: impl Fn(&str) -> Result<(), E>) -> std::result::Resul
         rl.add_history_entry(input_str)?;
 
         match evaluator(input_str) {
-            Ok(_) => continue,
+            Ok(EvalResult::Continue) => continue,
+            Ok(EvalResult::ExitRepl) => break Ok(ReplResult::ExitRepl),
+            Ok(EvalResult::Passthrough(x)) => break Ok(ReplResult::Passthrough(x)),
             Err(e) => break Err(ReplError::EvaluatorError(e)),
         }
     }
