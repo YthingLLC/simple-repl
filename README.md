@@ -71,7 +71,7 @@ fn eval(input: &str) -> Result<EvalResult<isize>, EvalError> {
 
 Try it out! The above example is in main.rs, and can be run on your PC with `cargo run`!
 
-
+For an example of how I use this with another piece of software, check out my [rpn calculator](https://github.com/davidsenk/rpn) [main.rs](https://github.com/davidsenk/rpn/blob/devel/src/main.rs)!
 
 
 I do not provide any guarantees, warranties, etc. This is licensed under the MIT license:
