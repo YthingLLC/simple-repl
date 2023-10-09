@@ -24,7 +24,7 @@ impl <E> std::convert::From<ReadlineError> for ReplError<E> {
     }
 }
 
-pub fn repl<T, E> (evaluator: impl Fn(&str) -> Result<EvalResult<T>, E>) -> std::result::Result<ReplResult<T>, ReplError<E>> {
+pub fn repl<T, E> (mut evaluator: impl FnMut(&str) -> Result<EvalResult<T>, E>) -> std::result::Result<ReplResult<T>, ReplError<E>> {
     let mut rl = DefaultEditor::new()?;
 
     loop {
